@@ -57,11 +57,16 @@ public struct Environment: Equatable, RawRepresentable {
     }
 
     /// The command-line arguments for this `Environment`.
-    public var arguments: [String]
+    public private(set) var arguments: [String]
+
+    /// The options for this `Environment`.
+    public private(set) var options: InfoPlist
 
     public var rawValue: String {
         return name
     }
+
+    // MARK: - Init
 
     public init?(rawValue: String) {
         switch rawValue {
@@ -77,11 +82,33 @@ public struct Environment: Equatable, RawRepresentable {
         }
     }
 
-    // MARK: Init
     /// Create a new `Environment`.
-    public init(name: String, arguments: [String] = CommandLine.arguments) {
+    public init(name: String, arguments: [String] = CommandLine.arguments, options: [String: Any] = [:]) {
         self.name = name
         self.arguments = arguments
+        self.options = InfoPlist(infoPlist: options)
+    }
+
+    // MARK: - Methods
+
+    /// Set a `String` option
+    public mutating func setStringOption(key: String, value: String?) {
+        options[dynamicMember: key] = value
+    }
+
+    /// Set a generic option conforming to `LosslessStringConvertible`
+    public mutating func setOption<T: LosslessStringConvertible>(key: String, value: T?) {
+        options[dynamicMember: key] = value
+    }
+
+    /// Get a `String` option
+    public func getStringOption(key: String) -> String? {
+        return options[dynamicMember: key]
+    }
+
+    /// Get a generic option
+    public func getOption<T: LosslessStringConvertible>(key: String) -> T? {
+        return options[dynamicMember: key] as? T
     }
 }
 
@@ -147,8 +174,8 @@ extension Environment {
 
         /// Gets a variable's value from the process' environment, and converts it to generic type `T`.
         ///
-        ///     Environment.process.DATABASE_PORT = 3306
-        ///     Environment.process.DATABASE_PORT // 3306
+        ///     Environment.development.options.DATABASE_PORT = 3306
+        ///     Environment.development.options.DATABASE_PORT // 3306
         public subscript<T>(dynamicMember member: String) -> T? where T: LosslessStringConvertible {
             get {
                 guard let raw = self._info[member], let value = raw as? T else { return nil }
@@ -161,8 +188,8 @@ extension Environment {
 
         /// Gets a variable's value from the process' environment as a `String`.
         ///
-        ///     Environment.process.DATABASE_USER = "root"
-        ///     Environment.process.DATABASE_USER // "root"
+        ///     Environment.development.options.DATABASE_USER = "root"
+        ///     Environment.development.DATABASE_USER // "root"
         public subscript(dynamicMember member: String) -> String? {
             get {
                 guard let raw = self._info[member], let value = raw as? String else { return nil }

@@ -19,7 +19,7 @@ public enum ContainerError: Error {
 public final class Container {
 
     /// Service `Environment` (e.g., production, dev). Use this to dynamically swap services based on environment.
-    public let env: Environment
+    public let environment: Environment
 
     /// Service `Config`. Used to disambiguate and/or require concrete services for a given interface.
     public var config: Config
@@ -36,8 +36,8 @@ public final class Container {
         return self.services.providers
     }
 
-    public init(env: Environment, config: Config, services: Services) {
-        self.env = env
+    public init(environment: Environment, config: Config, services: Services) {
+        self.environment = environment
         self.config = config
         self.services = services
         self.cache = .init()
