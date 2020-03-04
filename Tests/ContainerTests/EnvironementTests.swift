@@ -102,4 +102,20 @@ class EnvironementTests: XCTestCase {
         XCTAssertNil(environement.options.URL_PORT)
         XCTAssertNil(environement.getStringOption(key: "URL_PORT"))
     }
+
+    static var allTests = [
+        ("testDevelopmentCreation", testDevelopmentCreation),
+        ("testProductionCreation", testProductionCreation),
+        ("testTestableCreation", testTestableCreation),
+        ("testOtherCreation", testOtherCreation),
+        ("testCustomEnvironementWithCustomArgument", testCustomEnvironementWithCustomArgument),
+        ("testProcessString", testProcessString),
+        ("testProcessGeneric", testProcessGeneric),
+        ("testGetEnvironementValue", testGetEnvironementValue),
+        ("testGetRawValueDevelopmentCreation", testGetRawValueDevelopmentCreation),
+        ("testEquality", testEquality),
+        ("testCreateWithRawValue", testCreateWithRawValue),
+        ("testOptionsString", testOptionsString),
+        ("testOptionGeneric", testOptionGeneric),
+    ]
 }

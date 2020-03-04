@@ -55,4 +55,9 @@ class ContainerTests: XCTestCase {
 
         container.shutdown()
     }
+
+    static var allTests = [
+        ("testContainerCreation", testContainerCreation),
+        ("testContainerPreference", testContainerPreference),
+    ]
 }
