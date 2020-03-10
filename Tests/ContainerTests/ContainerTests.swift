@@ -26,7 +26,7 @@ class ContainerTests: XCTestCase {
     }
 
     func testContainerPreference() {
-        var environement = Environment.testing
+        var environement = Settings.testing
         environement.setStringOption(key: "DB_NAME", value: "sqlite")
 
         var config = Config()
