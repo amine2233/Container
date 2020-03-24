@@ -7,27 +7,27 @@
 
 import Foundation
 
-public struct Settings: Equatable, RawRepresentable {
+public struct Environement: Equatable, RawRepresentable {
 
     public typealias RawValue = String
 
     /// An environment for deploying your application to consumers.
-    public static var production: Settings {
+    public static var production: Environement {
         return .init(name: "production")
     }
 
     /// An environment for developing your application.
-    public static var development: Settings {
+    public static var development: Environement {
         return .init(name: "development")
     }
 
     /// An environment for testing your application.
-    public static var testing: Settings {
+    public static var testing: Environement {
         return .init(name: "testing")
     }
 
     /// Creates a custom environment.
-    public static func custom(name: String) -> Settings {
+    public static func custom(name: String) -> Environement {
         return .init(name: name)
     }
 
@@ -37,7 +37,7 @@ public struct Settings: Equatable, RawRepresentable {
     }
 
     /// See `Equatable`
-    public static func == (lhs: Settings, rhs: Settings) -> Bool {
+    public static func == (lhs: Environement, rhs: Environement) -> Bool {
         return lhs.name == rhs.name && lhs.isRelease == rhs.isRelease
     }
 
@@ -71,14 +71,14 @@ public struct Settings: Equatable, RawRepresentable {
     public init?(rawValue: String) {
         switch rawValue {
         case "production":
-            self = Settings.production
+            self = Environement.production
         case "development":
-            self = Settings.development
+            self = Environement.development
         case "testing":
-            self = Settings.testing
+            self = Environement.testing
         default:
             // return nil
-            self = Settings(name: rawValue)
+            self = Environement(name: rawValue)
         }
     }
 
@@ -112,7 +112,7 @@ public struct Settings: Equatable, RawRepresentable {
     }
 }
 
-extension Settings {
+extension Environement {
 
     @dynamicMemberLookup
     public struct Process {
@@ -161,7 +161,7 @@ extension Settings {
     }
 }
 
-extension Settings {
+extension Environement {
 
     @dynamicMemberLookup
     public struct InfoPlist {

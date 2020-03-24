@@ -19,7 +19,7 @@ public enum ContainerError: Error {
 public final class Container {
 
     /// Service `Environment` (e.g., production, dev). Use this to dynamically swap services based on environment.
-    public let environment: Settings
+    public private(set) var environment: Environement
 
     /// Service `Config`. Used to disambiguate and/or require concrete services for a given interface.
     public var config: Config
@@ -32,11 +32,12 @@ public final class Container {
 
     private var didShutdown: Bool
 
+    /// The array of `Provider`
     public var providers: [Provider] {
         return self.services.providers
     }
 
-    public init(environment: Settings, config: Config, services: Services) {
+    public init(environment: Environement, config: Config, services: Services) {
         self.environment = environment
         self.config = config
         self.services = services
@@ -44,6 +45,10 @@ public final class Container {
         self.didShutdown = false
     }
 
+    /// Make a service
+    /// - parameters:
+    ///     - service: the type of of service `S.Type`
+    /// - returns: The service `S`
     public func make<S>(_ service: S.Type = S.self) throws -> S {
         assert(!self.didShutdown, "Container.shutdown() has been called, this Container is no longer valid.")
 
@@ -92,9 +97,22 @@ public final class Container {
         return self
     }
 
+    /// Shutdonw the container, this will be clear all the cache `Singleton`
     public func shutdown() {
         self.cache.clear()
         self.didShutdown = true
+    }
+
+    /// Update the container Environement
+    /// - parameters:
+    ///     - environment: the new `Environment`
+    /// - returns: The `Container` it self
+    @discardableResult
+    public func switchEnvironement(_ environment: Environement) -> Container {
+        shutdown()
+        self.environment = environment
+        self.didShutdown = false
+        return willBoot().didBoot()
     }
 
     deinit {

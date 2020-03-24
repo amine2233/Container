@@ -12,76 +12,76 @@ import XCTest
 class SettingsTests: XCTestCase {
 
     func testDevelopmentCreation() {
-        let environement = Settings.development
+        let environement = Environement.development
         XCTAssertEqual(environement.name, "development")
         XCTAssertFalse(environement.isRelease)
     }
 
     func testProductionCreation() {
-        let environement = Settings.production
+        let environement = Environement.production
         XCTAssertEqual(environement.name, "production")
         // https://alexplescan.com/posts/2016/05/03/swift-a-nicer-way-to-tell-if-your-app-is-running-in-debug-mode/
         XCTAssertFalse(environement.isRelease)
     }
 
     func testTestableCreation() {
-        let environement = Settings.testing
+        let environement = Environement.testing
         XCTAssertEqual(environement.name, "testing")
         XCTAssertFalse(environement.isRelease)
     }
 
     func testOtherCreation() {
-        let environement = Settings.custom(name: "local")
+        let environement = Environement.custom(name: "local")
         XCTAssertEqual(environement.name, "local")
         XCTAssertFalse(environement.isRelease)
     }
 
     func testCustomEnvironementWithCustomArgument() {
-        let environement = Settings(name: "custom", arguments: ["isTest"])
+        let environement = Environement(name: "custom", arguments: ["isTest"])
         XCTAssertEqual(environement.name, "custom")
         XCTAssertEqual(environement.arguments, ["isTest"])
     }
 
     func testProcessString() {
-        Settings.process.DATABASE_TYPE = "postgres"
-        XCTAssertEqual(Settings.process.DATABASE_TYPE, "postgres")
-        Settings.process.DATABASE_TYPE = nil
-        XCTAssertNil(Settings.process.DATABASE_TYPE)
+        Environement.process.DATABASE_TYPE = "postgres"
+        XCTAssertEqual(Environement.process.DATABASE_TYPE, "postgres")
+        Environement.process.DATABASE_TYPE = nil
+        XCTAssertNil(Environement.process.DATABASE_TYPE)
     }
 
     func testProcessGeneric() {
-        Settings.process.DATABASE_PORT = 5432
-        XCTAssertEqual(Settings.process.DATABASE_PORT, 5432)
-        Settings.process.DATABASE_PORT = nil
-        XCTAssertNil(Settings.process.DATABASE_PORT)
+        Environement.process.DATABASE_PORT = 5432
+        XCTAssertEqual(Environement.process.DATABASE_PORT, 5432)
+        Environement.process.DATABASE_PORT = nil
+        XCTAssertNil(Environement.process.DATABASE_PORT)
     }
 
     func testGetEnvironementValue() {
-        Settings.process.DATABASE_TYPE = "postgres"
-        let type = Settings.get("DATABASE_TYPE")
+        Environement.process.DATABASE_TYPE = "postgres"
+        let type = Environement.get("DATABASE_TYPE")
         XCTAssertEqual(type, "postgres")
     }
 
     func testGetRawValueDevelopmentCreation() {
-        let environement = Settings.development
+        let environement = Environement.development
         XCTAssertEqual(environement.rawValue, "development")
     }
 
     func testEquality() {
-        let environement = Settings.development
-        let custom = Settings.custom(name: "development")
+        let environement = Environement.development
+        let custom = Environement.custom(name: "development")
         XCTAssertEqual(environement, custom)
     }
 
     func testCreateWithRawValue() {
         ["development","production","testing","custom"].forEach {
-            XCTAssertEqual(Settings(rawValue: $0)?.name, $0)
+            XCTAssertEqual(Environement(rawValue: $0)?.name, $0)
         }
     }
 
     func testOptionsString() {
         let urlPath = "http://myurl.com"
-        var environement = Settings.development
+        var environement = Environement.development
         environement.setStringOption(key: "URL", value: urlPath)
         XCTAssertEqual(environement.options.URL, urlPath)
         XCTAssertEqual(environement.getStringOption(key: "URL"), urlPath)
@@ -93,7 +93,7 @@ class SettingsTests: XCTestCase {
 
     func testOptionGeneric() {
         let urlPort = 8080
-        var environement = Settings.development
+        var environement = Environement.development
         environement.setOption(key: "URL_PORT", value: urlPort)
         XCTAssertEqual(environement.options.URL_PORT, urlPort)
         // XCTAssertEqual(environement.getOption(key: "URL_PORT"), urlPort)
