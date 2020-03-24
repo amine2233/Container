@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Container'
-  s.version = '0.0.1'
+  s.version = '0.1.0'
   s.summary = 'Container lib.'
   s.description = <<-DESC
   Container is a Dependency injection.
